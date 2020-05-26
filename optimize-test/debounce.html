@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #content{
+      width: 200px;
+      height: 200px;
+      margin: 100px auto;
+      background-color: antiquewhite;
+      text-align: center;
+      line-height: 200px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="content">1</div>
+  <script>
+    let num = 1;
+    let dom = document.getElementById('content');
+    const change = function (...args) {
+      dom.innerHTML = num++;
+    }
+
+    const debounce = function (fn, delay) {
+      let timer = null;
+      return function (...args) {
+        if (timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          fn(...args)
+        }, delay);
+      }
+    }
+    const newFunc = debounce(change, 500);
+    dom.addEventListener('mousemove', newFunc)
+  </script>
+</body>
+</html>

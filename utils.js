@@ -48,12 +48,55 @@ class Jsonp {
   }
 }
 
+class Funcs {
+  memoize (func, hasher) { // 缓存函数
+    const _memoize = function (key) {
+      const _cache = _memoize.cache;
+      const _key = '' + (hasher ? hasher.apply(this, arguments) : key);
+      if (!_cache[_key]) {
+        _cache[_key] = func.apply(this, arguments);
+      }
+      return _cache[_key];
+    }
+    _memoize.cache = {};
+    return _memoize;
+  }
+}
+
+class Optimize {
+  debounce (fn, delay) { // 防抖
+    let timer = null;
+    return function (...args) {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        fn(...args)
+      }, delay);
+    }
+  }
+
+  throttle (fn, delay) { // 节流
+    let flag = true;
+    return function (...args) {
+      if (!flag) return;
+      flag = false;
+      setTimeout(() => {
+        fn(...args);
+        flag = true;
+      }, delay);
+    }
+  }
+}
+
 function Utils (type) {
   return Utils.components[type];
 }
 
 Utils.components = {
-  jsonp: new Jsonp()
+  jsonp: new Jsonp(),
+  funcs: new Funcs(),
+  optimize: new Optimize()
 }
 
 export default Utils;
